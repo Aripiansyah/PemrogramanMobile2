@@ -1,22 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart'; // ⭐️ Wajib di-import
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-// ----------------------------------------------------
-// 1. RIVERPOD STATE DEFINITION
-// ----------------------------------------------------
-
-// Definisikan StateProvider untuk menyimpan nilai counter.
-// Ini menggantikan 'int _counter = 0;' di StatefulWidget.
 final counterProvider = StateProvider<int>((ref) {
-  return 0; // Nilai awal
+  return 0;
 });
 
-// ----------------------------------------------------
-// 2. MAIN APP SETUP
-// ----------------------------------------------------
-
 void main() {
-  // ⭐️ WAJIB: Bungkus MyApp dengan ProviderScope
   runApp(const ProviderScope(child: MyApp()));
 }
 
@@ -31,27 +20,20 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         useMaterial3: true,
       ),
-      // MyHomePage sekarang akan menjadi ConsumerWidget (tidak perlu diubah)
-      home: const MyHomePage(title: 'Sahrul Aripiansyah'),
+
+      home: const MyHomePage(title: 'Nazwa Akmalul Firdaus'),
       color: Colors.white,
     );
   }
 }
 
-// ----------------------------------------------------
-// 3. HOME PAGE (CONSUMERWIDGET)
-// ----------------------------------------------------
-
-// ⭐️ Ganti StatefulWidget menjadi ConsumerWidget dari Riverpod
 class MyHomePage extends ConsumerWidget {
   final String title;
 
   const MyHomePage({super.key, required this.title});
 
   @override
-  // ⭐️ ConsumerWidget memerlukan WidgetRef ref di method build
   Widget build(BuildContext context, WidgetRef ref) {
-    // ⭐️ Ambil nilai counter dari provider (Ref.watch akan merefresh UI saat state berubah)
     final counter = ref.watch(counterProvider);
 
     return Scaffold(
@@ -70,7 +52,6 @@ class MyHomePage extends ConsumerWidget {
         elevation: 0,
       ),
 
-      // ⭐️ Body untuk Gradient
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
@@ -148,9 +129,7 @@ class MyHomePage extends ConsumerWidget {
                           },
                       child: Text(
                         '$counter',
-                        key: ValueKey<int>(
-                          counter,
-                        ), // ⭐️ KEY WAJIB ADA dan unik!
+                        key: ValueKey<int>(counter),
                         style: Theme.of(context).textTheme.displayLarge
                             ?.copyWith(
                               fontWeight: FontWeight.bold,
@@ -169,11 +148,9 @@ class MyHomePage extends ConsumerWidget {
       floatingActionButton: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          // Tombol Decrement
           FloatingActionButton(
             heroTag: "decrement",
             onPressed: () {
-              // ⭐️ Mengubah state Riverpod: ref.read(provider.notifier).update(...)
               ref.read(counterProvider.notifier).update((state) => state - 1);
             },
             tooltip: 'Kurangi',
@@ -185,7 +162,6 @@ class MyHomePage extends ConsumerWidget {
           FloatingActionButton(
             heroTag: "increment",
             onPressed: () {
-              // ⭐️ Mengubah state Riverpod: ref.read(provider.notifier).update(...)
               ref.read(counterProvider.notifier).update((state) => state + 1);
             },
             tooltip: 'Tambah',
